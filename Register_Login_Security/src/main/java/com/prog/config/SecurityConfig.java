@@ -16,6 +16,9 @@ public class SecurityConfig {
 
 	@Autowired
 	public CustonAuthSuccessHandler successHandler;
+	
+	@Autowired
+	public CustomFailureHandler failureHandler;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -50,7 +53,9 @@ public class SecurityConfig {
 
 		http.csrf().disable().authorizeHttpRequests().requestMatchers("/user/**").hasRole("USER")
 				.requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/**").permitAll().and().formLogin()
-				.loginPage("/signin").loginProcessingUrl("/userLogin").successHandler(successHandler).permitAll();
+				.loginPage("/signin").loginProcessingUrl("/userLogin")
+				.failureHandler(failureHandler)
+				.successHandler(successHandler).permitAll();
 
 		return http.build();
 	}
