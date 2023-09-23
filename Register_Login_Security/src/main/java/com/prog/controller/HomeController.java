@@ -26,12 +26,12 @@ public class HomeController {
 
 	@ModelAttribute
 	public void commonUser(Principal p, Model m) {
-
 		if (p != null) {
 			String email = p.getName();
 			User user = userRepo.findByEmail(email);
 			m.addAttribute("user", user);
 		}
+
 	}
 
 	@GetMapping("/")
@@ -49,32 +49,29 @@ public class HomeController {
 		return "login";
 	}
 
-	@GetMapping("/user/profile")
-	public String profile(Principal p, Model m) {
-		String email = p.getName();
-		User user = userRepo.findByEmail(email);
-		m.addAttribute("user", user);
-		return "profile";
-	}
-
-	@GetMapping("/user/home")
-	public String home() {
-		return "home";
-	}
+	/*
+	 * @GetMapping("/user/profile") public String profile(Principal p, Model m) {
+	 * String email = p.getName(); User user = userRepo.findByEmail(email);
+	 * m.addAttribute("user", user); return "profile"; }
+	 * 
+	 * @GetMapping("/user/home") public String home() { return "home"; }
+	 */
 
 	@PostMapping("/saveUser")
-	public String saveUser(@ModelAttribute User user, HttpSession session) {
+	public String saveUser(@ModelAttribute User user, HttpSession session, Model m) {
+
+		// System.out.println(user);
 
 		User u = userService.saveUser(user);
 
 		if (u != null) {
-//			System.out.println("Save Success");
-			session.setAttribute("msg", "Register Successfully");
-		} else {
-//			System.out.println("Error");
-			session.setAttribute("msg", "Server Error!");
-		}
+			// System.out.println("save sucess");
+			session.setAttribute("msg", "Register successfully");
 
+		} else {
+			// System.out.println("error in server");
+			session.setAttribute("msg", "Something wrong server");
+		}
 		return "redirect:/register";
 	}
 
